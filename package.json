@@ -1,0 +1,23 @@
+{
+  "name": "vue-lazy-image",
+  "version": "1.0.0",
+  "description": "A simple clean vue plugin for image lazy load. load image when it is within the viewport. no try again when load failed",
+  "main": "lazyimg.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/legeneek/vue-lazy-image.git"
+  },
+  "keywords": [
+    "image",
+    "lazyload"
+  ],
+  "author": "legeneek",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/legeneek/vue-lazy-image/issues"
+  },
+  "homepage": "https://github.com/legeneek/vue-lazy-image#readme"
+}
