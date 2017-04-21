@@ -103,8 +103,7 @@ const LazyImg = {
     for (let j = 0; j < Events.length; ++j) {
       window.addEventListener(Events[j], tProcess)
     }
-
-
+    
   }
 }
 

@@ -8,7 +8,7 @@ Vue2, ES6
 ```js
 // entry.js
 import Vue from 'vue'
-import LazyImg from 'vue-lazy-image'
+import LazyImg from 'v2-lazy-image'
 
 Vue.use(LazyImg)
 

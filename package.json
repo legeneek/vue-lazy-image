@@ -1,5 +1,5 @@
 {
-  "name": "vue-lazy-image",
+  "name": "v2-lazy-image",
   "version": "1.0.0",
   "description": "A simple clean vue plugin for image lazy load. load image when it is within the viewport. no try again when load failed",
   "main": "lazyimg.js",
