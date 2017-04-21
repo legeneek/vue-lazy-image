@@ -4,6 +4,11 @@ A simple clean vue plugin for image lazy load. load image when it is within the 
 # require
 Vue2, ES6
 
+# install
+```
+npm i v2-lazy-image
+```
+
 # usage
 ```js
 // entry.js
