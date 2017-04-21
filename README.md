@@ -1,15 +1,15 @@
 # vue-lazy-image
 A simple clean vue plugin for image lazy load. load image when it is within the viewport. no try again when load failed
 
-# require
+## require
 Vue2, ES6
 
-# install
+## install
 ```
 npm i v2-lazy-image
 ```
 
-# usage
+## usage
 ```js
 // entry.js
 import Vue from 'vue'
@@ -20,7 +20,7 @@ Vue.use(LazyImg)
 ```
 
 ```vue
-// your component.vue
+<!--your component.vue-->
 <template>
   <img v-lazyimg="source" :data-id="imgId" src="defaultImage">
 </template>
@@ -41,7 +41,15 @@ export default {
   }
 }
 </script>
+
+<style>
+/*set display to inline-block/block and set width/height to get correct BoundingClientRect*/
+img {
+  display: inline-block;
+  width: 100%;
+}
+</style>
 ```
 
-# license
+## license
 ISC
