@@ -24,7 +24,7 @@ Vue.use(LazyImg, {preload: 1.1})
 ```vue
 <!--your component.vue-->
 <template>
-  <img v-lazyimg="source" :data-id="imgId" src="defaultImage">
+  <img v-lazyimg="source" :data-id="imgId" :src="defaultImage">
 </template>
 
 <script>
