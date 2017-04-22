@@ -4,8 +4,8 @@ function checkInView (el, r) {
   if (!el) return
   let rect = el.getBoundingClientRect()
   let ratio = r || 1
-  // vertical check only
-  return rect.top < window.innerHeight * ratio && rect.bottom >= 0
+  return rect.top < window.innerHeight * ratio && rect.bottom >= 0 &&
+      rect.left < window.innerWidth * ratio && rect.right >= 0
 }
 
 function throttle (fn, delay, mustRunDelay) {
@@ -33,6 +33,7 @@ const LazyImg = {
   install(Vue, config) {
     // cache unload imgs
     let imgs = {}
+    let pre = config && config.preload
 
     function processImg () {
       let i, k, len
@@ -40,7 +41,7 @@ const LazyImg = {
       for (i = 0, len = ks.length; i < len; ++i) {
         k = ks[i]
         if (!imgs[k].loading) {
-          if (checkInView(imgs[k].el, 1.1)) {
+          if (checkInView(imgs[k].el, pre)) {
             loadImg(imgs[k])
           }
         }
@@ -59,7 +60,7 @@ const LazyImg = {
       }
 
       Vue.nextTick(() => {
-        if (checkInView(el, 1.1)) {
+        if (checkInView(el, pre)) {
           loadImg(imgs[id])
         }
       })
