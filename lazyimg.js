@@ -59,11 +59,9 @@ const LazyImg = {
         loading: false
       }
 
-      Vue.nextTick(() => {
-        if (checkInView(el, pre)) {
-          loadImg(imgs[id])
-        }
-      })
+      if (checkInView(el, pre)) {
+        loadImg(imgs[id])
+      }
     }
 
     function loadImg (img) {
@@ -71,14 +69,21 @@ const LazyImg = {
 
       img.loading = true
       let i = new Image()
+      i._src = img.src
+
       i.onload = function () {
-        img.el.src = img.src
-        // no need to process anymore
-        delete imgs[img.id]
+        // img.src may changed while loading
+        if (i._src === img.src) {
+          img.el.src = img.src
+          // no need to process anymore
+          delete imgs[img.id]
+        }
       }
       i.onerror = function () {
-        // no try again
-        delete imgs[img.id]
+        if (i._src === img.src) {
+          // no try again
+          delete imgs[img.id]
+        }
       }
 
       i.src = img.src
