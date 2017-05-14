@@ -29,63 +29,66 @@ function throttle (fn, delay, mustRunDelay) {
   }
 }
 
+function find (arr, el) {
+  let i, len
+  for(i = 0, len = arr.length; i < len; ++i) {
+    if (arr[i].el === el) {
+      return i
+    }
+  }
+  return -1
+}
+
 const LazyImg = {
   install(Vue, config) {
     // cache unload imgs
-    let imgs = {}
-    let pre = config && config.preload
+    let imgs = []
+    let conf = config || {preload: 1}
 
     function processImg () {
-      let i, k, len
-      let ks = Object.keys(imgs)
-      for (i = 0, len = ks.length; i < len; ++i) {
-        k = ks[i]
-        if (!imgs[k].loading) {
-          if (checkInView(imgs[k].el, pre)) {
-            loadImg(imgs[k])
-          }
+      let i, len
+      for (i = 0, len = imgs.length; i < len; ++i) {
+        if (!imgs[i].loading && !imgs[i].loaded && checkInView(imgs[i].el, conf.preload)) {
+          loadImg(imgs[i])
         }
       }
     }
 
     function updateSrc (src, el) {
-      // img unique id
-      let id = el.getAttribute('data-id')
-
-      imgs[id] = {
+      let index = find(imgs, el)
+      let img = {
         el,
-        id,
         src,
-        loading: false
+        loading: false,
+        loaded: false
       }
 
-      if (checkInView(el, pre)) {
-        loadImg(imgs[id])
+      if (index !== -1) {
+        imgs[index] = img
+      } else {
+        imgs.push(img)
       }
+
+      Vue.nextTick(function() {
+        tProcess()
+      })
     }
 
     function loadImg (img) {
-      if (img.loading) return
+      if (img.loading || img.loaded) return
 
       img.loading = true
       let i = new Image()
-      i._src = img.src
 
       i.onload = function () {
-        // img.src may changed while loading
-        if (i._src === img.src) {
-          img.el.src = img.src
-          // no need to process anymore
-          delete imgs[img.id]
-        }
+        img.el.src = img.src
+        img.loading =false
+        img.loaded = true
       }
       i.onerror = function () {
-        if (i._src === img.src) {
-          // no try again
-          delete imgs[img.id]
-        }
+        img.loading =false
+        img.loaded = true
       }
-
       i.src = img.src
     }
 
@@ -99,8 +102,19 @@ const LazyImg = {
         updateSrc(src, el)
       },
       componentUpdated (el, binding) {
+        tProcess()
       },
       unbind (el, binding) {
+        let index = find(imgs, el)
+        if (index !== -1) {
+          imgs[i] = {
+            el: null,
+            src: null,
+            loading: null,
+            loaded: null
+          }
+          imgs.splice(index, 1)
+        }
       }
     })
 

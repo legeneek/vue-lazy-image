@@ -24,7 +24,7 @@ Vue.use(LazyImg, {preload: 1.1})
 ```vue
 <!--your component.vue-->
 <template>
-  <img v-lazyimg="source" :data-id="imgId" :src="defaultImage">
+  <img v-lazyimg="source" :src="defaultImage">
 </template>
 
 <script>
@@ -33,12 +33,6 @@ export default {
     return {
       source: '//path/xxx.png',
       defaultImage: '//path/default.png'
-    }
-  },
-  computed: {
-    imgId () {
-      // get unique image id 
-      return id
     }
   }
 }
