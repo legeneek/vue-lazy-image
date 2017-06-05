@@ -10,7 +10,7 @@ npm i v2-lazy-image
 ```
 
 ## usage
-```js
+```javascript
 // entry.js
 import Vue from 'vue'
 import LazyImg from 'v2-lazy-image'

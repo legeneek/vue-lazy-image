@@ -41,26 +41,34 @@ function find (arr, el) {
 
 const LazyImg = {
   install(Vue, config) {
-    // cache unload imgs
     let imgs = []
-    let conf = config || {preload: 1}
+    let components = []
+    let opt = config || {
+        preload: 1
+      }
 
     function processImg () {
       let i, len
       for (i = 0, len = imgs.length; i < len; ++i) {
-        if (!imgs[i].loading && !imgs[i].loaded && checkInView(imgs[i].el, conf.preload)) {
-          loadImg(imgs[i])
-        }
+        checkAndLoadImg(imgs[i])
       }
     }
 
-    function updateSrc (src, el) {
+    function checkAndLoadImg (img) {
+      if (!img.loading && !img.loaded && checkInView(img.el, opt.preload)) {
+        loadImg(img)
+      }
+    }
+
+    function updateImg (src, el) {
       let index = find(imgs, el)
+      let defaultImg = el.getAttribute('src')
       let img = {
         el,
         src,
         loading: false,
-        loaded: false
+        loaded: false,
+        defaultImg
       }
 
       if (index !== -1) {
@@ -70,7 +78,7 @@ const LazyImg = {
       }
 
       Vue.nextTick(function() {
-        tProcess()
+        checkAndLoadImg(img)
       })
     }
 
@@ -82,12 +90,13 @@ const LazyImg = {
 
       i.onload = function () {
         img.el.src = img.src
-        img.loading =false
+        img.loading = false
         img.loaded = true
       }
       i.onerror = function () {
-        img.loading =false
+        img.loading = false
         img.loaded = true
+        img.el.src = img.defaultImg
       }
       i.src = img.src
     }
@@ -95,35 +104,23 @@ const LazyImg = {
     Vue.directive('lazyimg', {
       bind (el, binding) {
         let src = binding.value
-        updateSrc(src, el)
+        updateImg(src, el)
       },
       update (el, binding) {
         let src = binding.value
-        updateSrc(src, el)
+        updateImg(src, el)
       },
       componentUpdated (el, binding) {
-        tProcess()
       },
       unbind (el, binding) {
-        let index = find(imgs, el)
-        if (index !== -1) {
-          imgs[i] = {
-            el: null,
-            src: null,
-            loading: null,
-            loaded: null
-          }
-          imgs.splice(index, 1)
-        }
       }
     })
 
-    let tProcess = throttle(processImg, 200, 50)
+    let tProcess = throttle(processImg, 200, 100)
 
     for (let j = 0; j < Events.length; ++j) {
       window.addEventListener(Events[j], tProcess)
     }
-
   }
 }
 
