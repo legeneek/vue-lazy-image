@@ -42,7 +42,6 @@ function find (arr, el) {
 const LazyImg = {
   install(Vue, config) {
     let imgs = []
-    let components = []
     let opt = config || {
         preload: 1
       }
